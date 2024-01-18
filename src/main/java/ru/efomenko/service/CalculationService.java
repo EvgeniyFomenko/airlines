@@ -23,11 +23,13 @@ public class CalculationService {
         String from = "VVO";
         String to = "TLV";
         AtomicInteger sum = new AtomicInteger();
+        if(ticketList.isEmpty()){
+            return;
+        }
         List<Ticket> sortTickets = ticketList.stream().filter(ticket -> ticket.getOrigin().equals(from) && ticket.getDestination().equals(to))
                 .sorted(Comparator.comparingInt(Ticket::getPrice)).collect(Collectors.toList());
-
         int averageNumber = 2;
-        int medinePrice = sortTickets.get(sortTickets.size() / averageNumber).getPrice();
+        int medinePrice = sortTickets.get(((sortTickets.size()-1) / averageNumber)).getPrice();
 
         sortTickets.forEach(ticket -> sum.addAndGet(ticket.getPrice()));
 
@@ -42,7 +44,9 @@ public class CalculationService {
         String from = "VVO";
         String to = "TLV";
         Map<String, Duration> shortTimeArrived = new HashMap<>();
-
+        if(ticketList.isEmpty()){
+            return;
+        }
         ticketList.stream().filter(ticket -> ticket.getOrigin().equals(from) && ticket.getDestination().equals(to))
                 .peek(ticket -> shortTimeArrived.putIfAbsent(ticket.getCarrier(), getDurationTicket(ticket)))
                 .forEach(ticket -> shortTimeArrived.put(ticket.getCarrier(), getShortDuration(getDurationTicket(ticket), shortTimeArrived.get(ticket.getCarrier()))));
