@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class CalculationService {
-    private List<Ticket> ticketList;
+    private final List<Ticket> ticketList;
 
 
     public CalculationService(List<Ticket> ticketList) {
@@ -51,7 +51,7 @@ public class CalculationService {
                 .peek(ticket -> shortTimeArrived.putIfAbsent(ticket.getCarrier(), getDurationTicket(ticket)))
                 .forEach(ticket -> shortTimeArrived.put(ticket.getCarrier(), getShortDuration(getDurationTicket(ticket), shortTimeArrived.get(ticket.getCarrier()))));
 
-        shortTimeArrived.keySet().stream().forEach(key -> printResult(key, shortTimeArrived, from, to));
+        shortTimeArrived.keySet().forEach(key -> printResult(key, shortTimeArrived, from, to));
     }
 
     private static void printResult(String car, Map<String, Duration> shortTimeArrived, String from, String to) {
@@ -62,8 +62,7 @@ public class CalculationService {
     private Duration getDurationTicket(Ticket ticket) {
         LocalDateTime DepartureDateTime = LocalDateTime.of(ticket.getDeparture_date(), ticket.getDeparture_time());
         LocalDateTime ArrivalDateTime = LocalDateTime.of(ticket.getArrival_date(), ticket.getArrival_time());
-        Duration duration = Duration.between(DepartureDateTime, ArrivalDateTime);
-        return duration;
+        return Duration.between(DepartureDateTime, ArrivalDateTime);
     }
 
     private Duration getShortDuration(Duration incomingDuration, Duration saveDuration) {
