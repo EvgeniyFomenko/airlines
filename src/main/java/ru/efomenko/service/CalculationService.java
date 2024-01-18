@@ -13,15 +13,15 @@ import java.util.stream.Collectors;
 
 public class CalculationService {
     private final List<Ticket> ticketList;
-
+    private final String from = "VVO";
+    private final String to = "TLV";
 
     public CalculationService(List<Ticket> ticketList) {
         this.ticketList = ticketList;
     }
 
     public void calculateMedianDifferenceAveragePrice() {
-        String from = "VVO";
-        String to = "TLV";
+
         AtomicInteger sum = new AtomicInteger();
         if(ticketList.isEmpty()){
             return;
@@ -41,8 +41,6 @@ public class CalculationService {
     }
 
     public void calculateMinimalTimeFlight() {
-        String from = "VVO";
-        String to = "TLV";
         Map<String, Duration> shortTimeArrived = new HashMap<>();
         if(ticketList.isEmpty()){
             return;
